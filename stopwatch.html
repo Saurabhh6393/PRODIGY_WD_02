@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: pink;
+}
+p{
+    border-bottom:2px #0056b3;
+}
+.stopwatch {
+    text-align: center;
+}
+
+.time {
+    background-color: black;
+    color: #fff;
+    font-size: 2rem;
+    margin-bottom: 10px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+    text-align: center;
+    
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: #ce2c31;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    margin: 5px;
+}
+
+button:hover {
+    background-color: #081a2e;
+}
+
+    </style>
+    <title>Stopwatch</title>
+</head>
+<body>
+    <div class="stopwatch">
+        <div style="margin: auto; color:rebeccapurple;" ><h1>Stopwatch Application</h1></div>
+       
+        <div class="time" id="display">00:00:00</div>
+        <button id="startStopButton">Start</button>
+        <button id="resetButton">Reset</button>
+    </div>
+    <script>
+        let startTime;
+        let intervalId;
+        let running = false;
+        
+        const display = document.getElementById('display');
+        const startStopButton = document.getElementById('startStopButton');
+        const resetButton = document.getElementById('resetButton');
+        
+        startStopButton.addEventListener('click', startStop);
+        resetButton.addEventListener('click', reset);
+        
+        function startStop() {
+            if (running) {
+                clearInterval(intervalId);
+                startStopButton.textContent = 'Start';
+            } else {
+                startTime = Date.now() - (startTime ? startTime : 0);
+                intervalId = setInterval(updateTime, 10);
+                startStopButton.textContent = 'Stop';
+            }
+            running = !running;
+        }
+        
+        function updateTime() {
+            const currentTime = new Date(Date.now() - startTime);
+            const minutes = currentTime.getUTCMinutes();
+            const seconds = currentTime.getUTCSeconds();
+            const milliseconds = currentTime.getUTCMilliseconds();
+        
+            display.textContent = `${padTime(minutes)}:${padTime(seconds)}:${padTime(milliseconds, true)}`;
+        }
+        
+        function padTime(value, isMilliseconds = false) {
+            if (isMilliseconds) {
+                return value.toString().padStart(3, '0');
+            } else {
+                return value.toString().padStart(2, '0');
+            }
+        }
+        
+        function reset() {
+            clearInterval(intervalId);
+            display.textContent = '00:00:00';
+            running = false;
+            startStopButton.textContent = 'Start';
+            startTime = undefined;
+        }
+        </script>
+</body>
+</html>
